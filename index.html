@@ -12,7 +12,16 @@
 <body onload="init()">
     <h1>Tic Tac Toe</h1>
 
-    <div id="content"></div>
+    <img id="firework" class="firework" src="./img/fireworks.jpg" alt="Feuerwerk">
+    <audio id="fireworkSound" src="./sound/391539_5235550-lq.mp3"></audio>
+
+    <div>
+        <p id="current-player" class="current-player">Spieler 1 ist an der Reihe</p>
+    </div>
+    <div id="content">
+    </div>
+
+    <button onclick="restartGame()">Spiel neu starten</button>
 
     <script src="script.js"></script>
 </body>

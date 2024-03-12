@@ -1,8 +1,9 @@
 let fields = [null, null, null, null, null, null, null, null, null,];
-
+let currentPlayer = 1;
 
 function init() {
     render();
+    updateCurrentPlayerDisplay();
 }
 
 function render() {
@@ -27,6 +28,17 @@ function render() {
     contentDiv.innerHTML = tableHTML;
 };
 
+function updateCurrentPlayerDisplay() {
+    var currentPlayerElement = document.getElementById("current-player");
+    currentPlayerElement.textContent = "Spieler " + currentPlayer + " ist an der Reihe";
+}
+
+function switchPlayer() {
+    currentPlayer = (currentPlayer === 1) ? 2 : 1; // Wechsel zwischen Spieler 1 und Spieler 2
+    updateCurrentPlayerDisplay(); // Aktualisiert die Anzeige des aktuellen Spielers nach dem Wechsel
+}
+
+
 function handleClick(index) {
     if (fields[index] === null && !isGameFinished()) {
         fields[index] = getNextSymbol(); // Alternate between 'circle' and 'cross'
@@ -38,9 +50,22 @@ function handleClick(index) {
             const winningCombination = getWinningIndices();
             if (winningCombination.length > 0) {
                 drawWinningLine(winningCombination);
+                showFirework();
             }
         }
+        switchPlayer();
     }
+}
+
+function showFirework() {
+    const firework = document.getElementById('firework');
+    const fireworkSound = document.getElementById('fireworkSound');
+    firework.style.display = 'block'; // Feuerwerk anzeigen
+    fireworkSound.play();
+
+    setTimeout(() => {
+        firework.style.display = 'none'; // Feuerwerk ausblenden nach einer Weile
+    }, 2000); // Zeitspanne für die Anzeige des Feuerwerks
 }
 
 
@@ -79,7 +104,7 @@ function drawWinningLine(combination) {
     const lineColor = '#ff69b4';
     const lineWidth = 5;
 
-  
+
     const startCell = document.querySelectorAll(`td`)[combination[0]];
     const endCell = document.querySelectorAll(`td`)[combination[2]];
     const startRect = startCell.getBoundingClientRect();
@@ -93,15 +118,15 @@ function drawWinningLine(combination) {
     );
     const lineAngle = Math.atan2(endRect.top - startRect.top, endRect.left - startRect.left);
 
-  
+
     const line = document.createElement('div');
     line.style.position = 'absolute';
     line.style.width = `${lineLength}px`;
     line.style.height = `${lineWidth}px`;
     line.style.backgroundColor = lineColor;
-    line.style.top = `${ startRect.top + startRect.height / 2 - lineWidth / 2 } px`;
-    line.style.left = `${ startRect.left + startRect.width / 2 } px`;
-    line.style.transform = `rotate(${ lineAngle }rad)`;
+    line.style.top = `${startRect.top + startRect.height / 2 - lineWidth / 2} px`;
+    line.style.left = `${startRect.left + startRect.width / 2} px`;
+    line.style.transform = `rotate(${lineAngle}rad)`;
     line.style.top = `${startRect.top + startRect.height / 2 - lineWidth / 2 - contentRect.top}px`;
     line.style.left = `${startRect.left + startRect.width / 2 - contentRect.left}px`;
     line.style.transform = `rotate(${lineAngle}rad)`;
@@ -163,6 +188,10 @@ function generateAnimatedXSVG() {
 }
 
 
+function restartGame() {
+    fields = [null, null, null, null, null, null, null, null, null,];
+    render();
+}
 
 
 
