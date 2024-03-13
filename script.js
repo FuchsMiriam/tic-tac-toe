@@ -190,7 +190,9 @@ function generateAnimatedXSVG() {
 
 function restartGame() {
     fields = [null, null, null, null, null, null, null, null, null,];
+    currentPlayer = 1;
     render();
+    updateCurrentPlayerDisplay(currentPlayer);
 }
 
 
